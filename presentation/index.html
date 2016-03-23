@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Open Up</title>
+
+		<meta name="description" content="Open Up : Lesson 2 DNS servers">
+		<meta name="author" content="Tellier Benoit">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+	
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+
+
+<section>
+<img data-src="img/large.png"><br/>
+<img data-src="img/openup.png">
+
+<h2>Docker + Apache</h2>
+
+<p>Speaker : <a>Benoit Tellier</a></p>
+
+<p><small>
+Retrieve this presentation online : <a href="https://rawgit.com/Open-Up/openup02_06/master/presentation/index.html">https://rawgit.com/Open-Up/openup02_06/master/presentation/index.html</a><br/>
+And on <a href="https://github.com/Open-Up/openup02_06/">GitHub</a></small>
+</p>
+</section>
+
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+<section>
+<h2>Objectives</h2>
+<ul>
+  <li class="fragment">Understand docker purpose</li>
+  <li class="fragment">Use docker cli and docker file</li>
+  <li class="fragment">Use apache web server</li>
+</ul>
+</section>
+
+
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+<section>
+  <section>
+    <h1>Docker</h1>
+  </section>
+  <section>
+    <h2>What is virtualisation ?</h2>
+    <img data-src="img/vm.jpg">
+  </section>
+
+  <section>
+    <h2>Why should I use virtualisation</h2>
+       <ul>
+         <li class="fragment">Specialization : risk reduction</li>
+         <li class="fragment">Specialization : security</li>
+         <li class="fragment">Cost reduction</li>
+         <li class="fragment">Ease of management</li>
+         <li class="fragment">High availability ?</li>
+       </ul>
+  </section>
+
+  <section>
+    <h2>Different types</h2>
+       <ul>
+         <li class="fragment">Full (KVM, VirtualBox, etc...)</li>
+         <li class="fragment">Paravirtualized (drivers KVM, XEN)</li>
+         <li class="fragment">Containers (OpenVZ, LXC, Docker)</li>
+       </ul>
+  </section>
+
+  <section>
+    <h2>docker</h2>
+        <img data-src="img/docker.jpe">
+	<p class="fragment">Container</p>
+	<p class="fragment">Packaging applications</p>
+	<p class="fragment">Uses LXC and cgroups</p>
+	<p class="fragment">Proposes a high level API</p>
+  </section>
+
+  <section>
+    <h2>Why use docker ?</h2>
+	<ul>
+         <li class="fragment">Immutability</li>
+         <li class="fragment">Repeatability</li>
+         <li class="fragment">Shared enviroment</li>
+         <li class="fragment">Versionning</li>
+         <li class="fragment">Automation</li>
+       </ul>
+  </section>
+  <section>
+    <h2>A developper</h2>
+	<ul>
+         <li class="fragment">We have the same environment for reporting bugs</li>
+         <li class="fragment">If we do the same actions, we will get the same result</li>
+         <li class="fragment">One command to try my application</li>
+         <li class="fragment">Use it from your tests</li>
+       </ul>
+  </section>
+  <section>
+    <h2>An OPS</h2>
+	<ul>
+         <li class="fragment">I have the same environment everywhere</li>
+         <li class="fragment">I have versions attached to my deployed softwares</li>
+         <li class="fragment">I can start application with one command line</li>
+         <li class="fragment">Common environment to exchange with developpers</li>
+         <li class="fragment">We can review deployements</li>
+         <li class="fragment">I can replace stateless containers</li>
+       </ul>
+  </section>
+  <section>
+    <h2>Vocabulary</h2>
+	<ul>
+         <li class="fragment">Image</li>
+         <li class="fragment">Container</li>
+         <li class="fragment">Volume</li>
+         <li class="fragment">Expose a port</li>
+         <li class="fragment">link</li>
+         <li class="fragment">SHA1 / names</li>
+       </ul>
+  </section>
+  <section>
+    <h2>Sample commands</h2>
+    <pre class="fragment"><code>docker ps</code></pre>
+    <pre class="fragment"><code>docker ps -a</code></pre>
+    <pre class="fragment"><code>docker rm container</code></pre>
+  </section>
+  <section>
+    <h2>Sample commands</h2>
+    <pre class="fragment"><code>docker images</code></pre>
+    <pre class="fragment"><code>docker rmi image</code></pre>
+  </section>
+  <section>
+    <h2>Sample commands</h2>
+    <pre class="fragment"><code>docker run image</code></pre>
+    <pre class="fragment"><code>docker run --port "80:8080" image</code></pre>
+    <pre class="fragment"><code>docker run --link "dnsEntryUsed:linkedContainerName" image</code></pre>
+    <pre class="fragment"><code>docker run --volume "onMyComputer:inTheContainer" image</code></pre>
+    <pre class="fragment"><code>docker run --name "containerName" image</code></pre>
+  </section>
+  <section>
+    <h2>Sample commands</h2>
+    <pre class="fragment"><code>docker inspect container</code></pre>
+    <pre class="fragment"><code># !!!! Should not modify the state of the container !!!!
+docker exec container command</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+	<p class="fragment">Declarative file to build docker images</p>
+	<p class="fragment">One line defines one intermediate image</p>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>FROM 
+
+   specifies origin image
+
+   Exemple : FROM java:openjdk-8-jdk</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>ENV
+
+   defines environment variables
+
+   Exemple : ENV GIT_VERSION 1:2.1.4-2.1</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>WORKDIR
+
+   Changes of directory
+
+   Exemple : WORKDIR /root</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>RUN
+
+   Run a command inside the container
+
+   Exemple : RUN apt-get install -y git</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>COPY
+
+   Copy files into the container
+
+   Example : COPY compile.sh /root/compile.sh</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>ENTRYPOINT
+
+   Defines the command to execute when starting the container
+
+   Exemple : ENTRYPOINT ["/root/compile.sh"]</code></pre>
+  </section>
+  <section>
+    <h2>Dockerfile</h2>
+    <pre class="fragment"><code>FROM java:openjdk-8-jdk
+
+ENV GIT_VERSION 1:2.1.4-2.1
+
+# Install Maven
+WORKDIR /root
+RUN wget http://mirrors.ircam.fr/pub/apache/maven/maven-3/3.3.1/binaries/apache-maven-3.3.1-bin.tar.gz
+RUN tar -xvf apache-maven-3.3.1-bin.tar.gz
+RUN ln -s /root/apache-maven-3.3.1/bin/mvn /usr/bin/mvn
+
+# Install git
+RUN apt-get update
+RUN apt-get install -y git
+
+# Copy the script
+COPY compile.sh /root/compile.sh
+COPY integration_tests.sh /root/integration_tests.sh
+
+# Define the entrypoint
+WORKDIR /james-project
+ENTRYPOINT ["/root/compile.sh"]</code></pre>
+  </section>
+  <section>
+    <h2>Docker build</h2>
+    <pre class="fragment"><code>docker build</code></pre>
+    <pre class="fragment"><code>docker build --tag "tag"</code></pre>
+    <pre class="fragment"><code>docker build path/to/dockerfile</code></pre>
+  </section>
+  <section>
+    <h2>Usefull links</h2>
+    <p><a href="https://docs.docker.com/engine/reference/builder/">DockerFile</a></p>
+    <p><a href="https://docs.docker.com/engine/reference/run/">docker run</a></p>
+    <p><a href="https://docs.docker.com/engine/reference/commandline/cli/">docker command line interface</a></p>
+  </section>
+
+</section>
+
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+<section>
+  <section>
+    <h1>Apache</h1>
+  </section>
+  <section>
+    <h2>Apache</h2>
+    <img data-src="img/apache-logo.png">
+    <pre class="fragment"><code>apt-get install apache2</code></pre>
+    <pre class="fragment"><code>/etc/init.d/apache2 start / stop / reload</code></pre>
+    <a class="fragment" href="http://httpd.apache.org/">Apache project page</a><br/>
+    <a class="fragment" href="http://httpd.apache.org/docs">Apache documentation</a>
+  </section>
+  <section>
+    <h2>Configuration</h2>
+    <p>/etc/apache2/apache2.conf</p>
+    <pre><code>
+#	/etc/apache2/
+#	|-- apache2.conf
+#	|	`--  ports.conf
+#	|-- mods-enabled
+#	|	|-- *.load
+#	|	`-- *.conf
+#	|-- conf-enabled
+#	|	`-- *.conf
+# 	`-- sites-enabled
+#	 	`-- *.conf</code></pre>
+  </section>
+  <section>
+    <pre><code>Mutex file:${APACHE_LOCK_DIR} default
+PidFile ${APACHE_PID_FILE}
+Timeout 300
+KeepAlive On
+MaxKeepAliveRequests 100
+KeepAliveTimeout 5
+User ${APACHE_RUN_USER}
+Group ${APACHE_RUN_GROUP}
+HostnameLookups Off
+ErrorLog ${APACHE_LOG_DIR}/error.log
+LogLevel warn
+
+IncludeOptional mods-enabled/*.load
+IncludeOptional mods-enabled/*.conf
+Include ports.conf
+
+<Directory />
+	Options FollowSymLinks
+	AllowOverride None
+	Require all denied
+</Directory>
+
+<Directory /usr/share>
+	AllowOverride None
+	Require all granted
+</Directory>
+
+<Directory /var/www/>
+	Options Indexes FollowSymLinks
+	AllowOverride None
+	Require all granted
+</Directory>
+
+AccessFileName .htaccess
+
+<FilesMatch "^\.ht">
+	Require all denied
+</FilesMatch>
+
+LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %O" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+
+IncludeOptional conf-enabled/*.conf
+
+IncludeOptional sites-enabled/*.conf</code></pre>
+  </section>
+  <section>
+    <h2>apache2ctl</h2>
+    <pre class="fragment"><code># apachectl configtest
+Syntax OK</code></pre>
+    <pre class="fragment"><code># apachectl restart</code></pre>
+    <pre class="fragment"><code># apachectl graceful</code></pre>
+  </section>
+  <section>
+    <h2>Authentication</h2>
+    <pre class="fragment"><code>AuthType Basic
+AuthName "Authentification obligatoire"
+AuthUserFile /path/access/passwd
+Require valid-user</code></pre>
+    <pre class="fragment"><code>$ htpasswd -c passwd identifier</code></pre>
+    <pre class="fragment"><code>$ htpasswd passwd identifier</code></pre>
+  </section>
+  <section>
+    <h2>IP ACL</h2>
+    <pre class="fragment"><code>Require valid-user
+Order allow,deny
+Allow from 198.51.100.0/24
+Satisfy Any</code></pre>
+  </section>
+  <section>
+    <h2>Virtual host</h2>
+    <pre class="fragment"><code><VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+
+	ServerName weathermap-editor.minet.net
+	ServerAlias weathermap-editor
+
+	DocumentRoot /var/www/weathermap.minet.net
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/weathermap.minet.net>
+		Options -Indexes +FollowSymLinks +MultiViews
+		AllowOverride all
+		Order allow,deny
+		allow from all
+
+               	AuthType Basic
+               	AuthName "Intranet MiNET"
+               	AuthBasicProvider ldap
+               	#AuthzLDAPAuthoritative off
+               	AuthLDAPUrl ldap://ldap/ou=equipe,dc=minet,dc=net?uid
+               	AuthLDAPBindDN "cn=Apache,ou=auths,ou=systems,ou=equipe,dc=minet,dc=net"
+               	AuthLDAPBindPassword "egfuzeivkzeuf"
+               	Require valid-user
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/weathermap-editor-error.log
+	LogLevel warn
+	CustomLog ${APACHE_LOG_DIR}/weathermap-editor-access.log combined
+</VirtualHost>
+</code></pre>
+  </section>
+</section>
+
+
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+
+<section>
+	<h1>Questions ?</h1>
+</section>
+
+
+
+
+
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				slideNumber: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+                                
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
