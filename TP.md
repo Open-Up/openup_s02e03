@@ -28,13 +28,7 @@ Create a docker container that read the content of a file outside the container 
 
 Install Apache in a docker container. You should be able to render the default page in your browser.
 
-Hint : remember to call apt-get update before installing package apache2.
-
-Hint 2 : You can not call */etc/init.d/apache2 start* or equivalent as an entry point.
-
-Hint 3 : You need to load */etc/apache2envvars* before launching apache2
-
-Hint 4 : You need to initialize directories. I did that with a **RUN /etc/init.d/apache2 start** (not for starting server ! Yes, it's cheeting....) 
+Hint : You can start apache normally and then listen on a log file (/var/log/apache2/error.log) for instance
 
 ## Exercice 5
 
