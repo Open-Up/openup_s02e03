@@ -2,6 +2,10 @@
 
 In this practical work, we will see docker basis. You will know how to deploy a server in a docker container.
 
+Hint :
+
+Sometime to debug, it is usefull to enter a container. To do so : docker run -ti --entrypoint=/bin/bash image
+
 ## Exercice 1
 
 Docker Hello world :
