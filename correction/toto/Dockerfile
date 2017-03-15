@@ -6,6 +6,6 @@ RUN apt-get install -y apache2
 
 RUN touch /var/log/apache2/error.log
 
-EXPOSE 80
+COPY presentation /var/www/html
 
-ENTRYPOINT /etc/init.d/apache2 start && tail -f /var/log/apache2/access.log
+ENTRYPOINT /etc/init.d/apache2 start && tail -f /var/log/apache2/error.log

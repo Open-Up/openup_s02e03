@@ -1,45 +1,36 @@
-# Docker and Apache
+# Web architecture
 
-In this practical work, we will see docker basis. You will know how to deploy a server in a docker container.
+In this practical work, we will set up several websites.
 
-Hint :
+### Step 1 : Install Apache2
 
-Sometime to debug, it is usefull to enter a container. To do so : docker run -ti --entrypoint=/bin/bash image
+ - Install the Apache web server
+ - Create a first website named test.openup.com. It will lead to a first page that display "Hello OpenUp student".
+ - Create a secont website hello.openup.com. It will just return "Hello".
 
-## Exercice 1
+### Step 2 : Executing PHP
 
-Docker Hello world :
+ - Install the modules to execute PHP
+ - Create a dynamic PHP page and see the result in your browser
 
-Create a docker container with an entry point that says Hello world.
+### Step 3 : Setup MariaDB
 
-## Exercice 2
+ - Install MariaDB server
+ - Install Phpmyadmin, and add an Apache virtualhost for it
+ - Create a user "wordpress" and an associated database threw PhpMyAdmin
 
-Docker Hello world 2 :
+### Step 4 : Install WordPress
 
-Create a docker container that read the content of a file in a container and prints its content, setted to "Hello world".
+ - Download WordPress from the official website
+ - Install it with a new virtualHost
+ - Customize your new website a bit
 
-## Exercice 3
+### Step 5 : SSL
 
-Docker Hello world 3 :
+ - Install NGINX
+ - Use NGINX as a Proxy for your website
+ - Set up SSL with NGINX
 
-Create a docker container that read the content of a file outside the container and prints its content.
+### Step 6 : Add a FTP 
 
-## Exercice 4
-
-Install Apache in a docker container. You should be able to render the default page in your browser.
-
-Hint : You can start apache normally and then listen on a log file (/var/log/apache2/error.log) for instance
-
-## Exercice 5
-
-Replace this default page by yours ! (Hello world "your name"!) for instance.
-
-Hint : you need to replace /var/www/html/index.html by yours !
-
-## Exercice 6
-
-Add a virtual host to Apache and a second site. You should be able to access both sites using your browser.
-
-You should have the two site's domain names in your */etc/hosts* file, pointing to 127.0.0.1.
-
-Hint : you need to secify a server name for /etc/apache2/sites-enabled/000-default.conf
+ - Install proftpd and set it up for uploading file in Wordpress

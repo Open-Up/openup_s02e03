@@ -45,7 +45,7 @@
 <img data-src="img/large.png"><br/>
 <img data-src="img/openup.png">
 
-<h2>Docker + Apache</h2>
+<h2>Web infrastructure</h2>
 
 <p>Speaker : <a>Benoit Tellier</a></p>
 
@@ -54,6 +54,7 @@ Retrieve this presentation online : <a href="https://rawgit.com/Open-Up/openup02
 And on <a href="https://github.com/Open-Up/openup02_06/">GitHub</a></small>
 </p>
 </section>
+
 
 <!--------------------------------------------------
 ----------------------------------------------------
@@ -66,229 +67,28 @@ NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
 <section>
 <h2>Objectives</h2>
 <ul>
-  <li class="fragment">Understand docker purpose</li>
-  <li class="fragment">Use docker cli and docker file</li>
   <li class="fragment">Use apache web server</li>
+  <li class="fragment">Using MySQL</li>
+  <li class="fragment">Use NGinx as a reverse proxy</li>
+  <li class="fragment">Use SSL with NGinx</li>
 </ul>
 </section>
 
-
 <!--------------------------------------------------
 ----------------------------------------------------
 ================================================----
 NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
 ================================================----
-----------------------------------------------------
 ---------------------------------------------------->
 
 <section>
-  <section>
-    <h1>Docker</h1>
-  </section>
-  <section>
-    <h2>What is virtualisation ?</h2>
-    <img data-src="img/vm.jpg">
-  </section>
 
-  <section>
-    <h2>Why should I use virtualisation</h2>
-       <ul>
-         <li class="fragment">Specialization : risk reduction</li>
-         <li class="fragment">Specialization : security</li>
-         <li class="fragment">Cost reduction</li>
-         <li class="fragment">Ease of management</li>
-         <li class="fragment">High availability ?</li>
-       </ul>
-  </section>
 
-  <section>
-    <h2>Different types</h2>
-       <ul>
-         <li class="fragment">Full (KVM, VirtualBox, etc...)</li>
-         <li class="fragment">Paravirtualized (drivers KVM, XEN)</li>
-         <li class="fragment">Containers (OpenVZ, LXC, Docker)</li>
-       </ul>
-  </section>
-
-  <section>
-    <h2>docker</h2>
-        <img data-src="img/docker.jpe">
-	<p class="fragment">Container</p>
-	<p class="fragment">Packaging applications</p>
-	<p class="fragment">Uses LXC and cgroups</p>
-	<p class="fragment">Proposes a high level API</p>
-  </section>
-
-  <section>
-    <h2>Why use docker ?</h2>
-	<ul>
-         <li class="fragment">Immutability</li>
-         <li class="fragment">Repeatability</li>
-         <li class="fragment">Shared enviroment</li>
-         <li class="fragment">Versionning</li>
-         <li class="fragment">Automation</li>
-       </ul>
-  </section>
-  <section>
-    <h2>A developper</h2>
-	<ul>
-         <li class="fragment">We have the same environment for reporting bugs</li>
-         <li class="fragment">If we do the same actions, we will get the same result</li>
-         <li class="fragment">One command to try my application</li>
-         <li class="fragment">Use it from your tests</li>
-       </ul>
-  </section>
-  <section>
-    <h2>An OPS</h2>
-	<ul>
-         <li class="fragment">I have the same environment everywhere</li>
-         <li class="fragment">I have versions attached to my deployed softwares</li>
-         <li class="fragment">I can start application with one command line</li>
-         <li class="fragment">Common environment to exchange with developpers</li>
-         <li class="fragment">We can review deployements</li>
-         <li class="fragment">I can replace stateless containers</li>
-       </ul>
-  </section>
-  <section>
-    <h2>Vocabulary</h2>
-	<ul>
-         <li class="fragment">Image</li>
-         <li class="fragment">Container</li>
-         <li class="fragment">Volume</li>
-         <li class="fragment">Expose a port</li>
-         <li class="fragment">link</li>
-         <li class="fragment">SHA1 / names</li>
-       </ul>
-  </section>
-  <section>
-    <h2>Sample commands</h2>
-    <pre class="fragment"><code>docker ps</code></pre>
-    <pre class="fragment"><code>docker ps -a</code></pre>
-    <pre class="fragment"><code>docker rm container</code></pre>
-  </section>
-  <section>
-    <h2>Sample commands</h2>
-    <pre class="fragment"><code>docker images</code></pre>
-    <pre class="fragment"><code>docker rmi image</code></pre>
-  </section>
-  <section>
-    <h2>Sample commands</h2>
-    <pre class="fragment"><code>docker run image</code></pre>
-    <pre class="fragment"><code>docker run --port "80:8080" image</code></pre>
-    <pre class="fragment"><code>docker run --link "dnsEntryUsed:linkedContainerName" image</code></pre>
-    <pre class="fragment"><code>docker run --volume "onMyComputer:inTheContainer" image</code></pre>
-    <pre class="fragment"><code>docker run --name "containerName" image</code></pre>
-  </section>
-  <section>
-    <h2>Sample commands</h2>
-    <pre class="fragment"><code>docker inspect container</code></pre>
-    <pre class="fragment"><code># !!!! Should not modify the state of the container !!!!
-docker exec container command</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-	<p class="fragment">Declarative file to build docker images</p>
-	<p class="fragment">One line defines one intermediate image</p>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>FROM 
-
-   specifies origin image
-
-   Exemple : FROM java:openjdk-8-jdk</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>ENV
-
-   defines environment variables
-
-   Exemple : ENV GIT_VERSION 1:2.1.4-2.1</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>WORKDIR
-
-   Changes of directory
-
-   Exemple : WORKDIR /root</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>RUN
-
-   Run a command inside the container
-
-   Exemple : RUN apt-get install -y git</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>COPY
-
-   Copy files into the container
-
-   Example : COPY compile.sh /root/compile.sh</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>ENTRYPOINT
-
-   Defines the command to execute when starting the container
-
-   Exemple : ENTRYPOINT ["/root/compile.sh"]</code></pre>
-  </section>
-  <section>
-    <h2>Dockerfile</h2>
-    <pre class="fragment"><code>FROM java:openjdk-8-jdk
-
-ENV GIT_VERSION 1:2.1.4-2.1
-
-# Install Maven
-WORKDIR /root
-RUN wget http://mirrors.ircam.fr/pub/apache/maven/maven-3/3.3.1/binaries/apache-maven-3.3.1-bin.tar.gz
-RUN tar -xvf apache-maven-3.3.1-bin.tar.gz
-RUN ln -s /root/apache-maven-3.3.1/bin/mvn /usr/bin/mvn
-
-# Install git
-RUN apt-get update
-RUN apt-get install -y git
-
-# Copy the script
-COPY compile.sh /root/compile.sh
-COPY integration_tests.sh /root/integration_tests.sh
-
-# Define the entrypoint
-WORKDIR /james-project
-ENTRYPOINT ["/root/compile.sh"]</code></pre>
-  </section>
-  <section>
-    <h2>Docker build</h2>
-    <pre class="fragment"><code>docker build</code></pre>
-    <pre class="fragment"><code>docker build --tag "tag"</code></pre>
-    <pre class="fragment"><code>docker build path/to/dockerfile</code></pre>
-  </section>
-  <section>
-    <h2>Usefull links</h2>
-    <p><a href="https://docs.docker.com/engine/reference/builder/">DockerFile</a></p>
-    <p><a href="https://docs.docker.com/engine/reference/run/">docker run</a></p>
-    <p><a href="https://docs.docker.com/engine/reference/commandline/cli/">docker command line interface</a></p>
-  </section>
-
-</section>
-
-<!--------------------------------------------------
-----------------------------------------------------
-================================================----
-NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
-================================================----
-----------------------------------------------------
----------------------------------------------------->
-
-<section>
   <section>
     <h1>Apache</h1>
   </section>
+
+
   <section>
     <h2>Apache</h2>
     <img data-src="img/apache-logo.png">
@@ -297,6 +97,8 @@ NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
     <a class="fragment" href="http://httpd.apache.org/">Apache project page</a><br/>
     <a class="fragment" href="http://httpd.apache.org/docs">Apache documentation</a>
   </section>
+
+
   <section>
     <h2>Configuration</h2>
     <p>/etc/apache2/apache2.conf</p>
@@ -312,6 +114,8 @@ NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
 # 	`-- sites-enabled
 #	 	`-- *.conf</code></pre>
   </section>
+
+
   <section>
     <pre><code>Mutex file:${APACHE_LOCK_DIR} default
 PidFile ${APACHE_PID_FILE}
@@ -362,6 +166,8 @@ IncludeOptional conf-enabled/*.conf
 
 IncludeOptional sites-enabled/*.conf</code></pre>
   </section>
+
+
   <section>
     <h2>apache2ctl</h2>
     <pre class="fragment"><code># apachectl configtest
@@ -369,6 +175,8 @@ Syntax OK</code></pre>
     <pre class="fragment"><code># apachectl restart</code></pre>
     <pre class="fragment"><code># apachectl graceful</code></pre>
   </section>
+
+
   <section>
     <h2>Authentication</h2>
     <pre class="fragment"><code>AuthType Basic
@@ -378,6 +186,8 @@ Require valid-user</code></pre>
     <pre class="fragment"><code>$ htpasswd -c passwd identifier</code></pre>
     <pre class="fragment"><code>$ htpasswd passwd identifier</code></pre>
   </section>
+
+
   <section>
     <h2>IP ACL</h2>
     <pre class="fragment"><code>Require valid-user
@@ -385,40 +195,248 @@ Order allow,deny
 Allow from 198.51.100.0/24
 Satisfy Any</code></pre>
   </section>
+
+
   <section>
     <h2>Virtual host</h2>
-    <pre class="fragment"><code><VirtualHost *:80>
-	ServerAdmin webmaster@localhost
+    <img data-src="vh.png">
+  </section>
 
-	ServerName weathermap-editor.minet.net
-	ServerAlias weathermap-editor
+  <section>
+    <h2>Modules</h2>
+    <pre class="fragment"><code>root@openpaas-prod:btellier$ apt-cache search libapache2-mod
+libapache2-mod-jk - Apache 2 connector for the Tomcat Java servlet engine
+libapache2-mod-log-sql - Use SQL to store/write your Apache queries logs - Base
+...
+libapache2-mod-perl2 - Integration of perl with the Apache2 web server
+...
+libapache2-mod-python - Python-embedding module for Apache 2
+...
+libapache2-mod-php5 - server-side, HTML-embedded scripting language (Apache 2 module)
+...</code></pre>
+  </section>
 
-	DocumentRoot /var/www/weathermap.minet.net
-	<Directory />
-		Options FollowSymLinks
-		AllowOverride None
-	</Directory>
-	<Directory /var/www/weathermap.minet.net>
-		Options -Indexes +FollowSymLinks +MultiViews
-		AllowOverride all
-		Order allow,deny
-		allow from all
 
-               	AuthType Basic
-               	AuthName "Intranet MiNET"
-               	AuthBasicProvider ldap
-               	#AuthzLDAPAuthoritative off
-               	AuthLDAPUrl ldap://ldap/ou=equipe,dc=minet,dc=net?uid
-               	AuthLDAPBindDN "cn=Apache,ou=auths,ou=systems,ou=equipe,dc=minet,dc=net"
-               	AuthLDAPBindPassword "egfuzeivkzeuf"
-               	Require valid-user
-	</Directory>
+</section>
 
-	ErrorLog ${APACHE_LOG_DIR}/weathermap-editor-error.log
-	LogLevel warn
-	CustomLog ${APACHE_LOG_DIR}/weathermap-editor-access.log combined
-</VirtualHost>
-</code></pre>
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+<section>
+  <section>
+    <img data-src="img/mm.jpg">
+  </section>
+  <section>
+    <img data-src="img/mysql1.png">
+  </section>
+  <section>
+    <img data-src="img/mysql2.png">
+  </section>
+  <section>
+    <img data-src="img/mysql3.png">
+  </section>
+  <section>
+    <img data-src="img/mysql4.png">
+  </section>
+</section>
+
+
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+<section>
+  <section>
+    <h1>NGinx</h1>
+  </section>
+  <section>
+    <h2>What is a reverse proxy ?</h2>
+    <img data-src="img/reverseproxy.gif">
+  </section>
+
+  <section>
+    <h2>Why a reverse proxy ?</h2>
+    <ul>
+       <li class="fragment">Cache</li>
+       <li class="fragment">Compression</li>
+       <li class="fragment">SSL</li>
+       <li class="fragment">Load balancing</li>
+       <li class="fragment">Only one access point from the internet</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>NGinx</h2>
+       <img data-src="img/nginx.png">
+       <p> Web server and reverse proxy</p>
+       <p class="fragment">Lightweight and performant</p>
+       <pre class="fragment"><code>apt-get install nginx</code></pre>
+       <pre class="fragment"><code>/etc/init.d/nginx start | stop | restart</code></pre>
+       <p class="fragment">Main configuration in /etc/nginx/nginx.conf</p>
+       <div class="fragment"><a href="http://nginx.org/">documentation</a></div>
+  </section>
+
+  <section>
+    <h2>Example of configuration</h2>
+       <pre><code>user www-data ;
+worker_processes 2 ;
+
+events
+{
+    worker_connections 512 ;
+}
+
+http
+{
+   sendfile on ;
+   include nginx.conf-server ;
+   include nginx.conf-relays ;
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Configuration as webserver</h2>
+       <pre><code>server
+{
+    listen [::]:80 ;
+    server_name www.example.com ;
+    
+    location /
+    {
+        root /usr/share/nginx/www ;
+    }
+
+    access_log /var/log/nginx/www.example.com-access.log ;
+    error_log /var/log/nginx/www.example.com-error.log ;
+}</code></pre>
+  </section>
+  <section>
+    <h2>Configuration as reverse proxy</h2>
+       <pre><code>server
+{
+    listen [::]:80 ;
+    server_name www.example.org ;
+
+    location /
+    {
+        proxy_pass http://www.example.com ;
+    }
+
+    access_log /var/log/nginx/www.example.org-access.log ;
+    error_log /var/log/nginx/www.example.org-error.log ;
+}</code></pre>
+  </section>
+  <section>
+    <h2>NGinx command</h2>
+    <pre><code># Control NGinx
+nginx -s stop
+nginx -s quit
+nginx -s reload
+nginx -s reopen
+
+# Verify syntax
+nginx -t
+
+# Informations
+nginx -v 
+nginx -V</code></pre>
+  </section>
+
+</section>
+
+<!--------------------------------------------------
+----------------------------------------------------
+================================================----
+NEW SECTION NEW SECTION NEW SECTION NEW SECTION=----
+================================================----
+----------------------------------------------------
+---------------------------------------------------->
+
+<section>
+  <section>
+    <img data-src="img/ssl.png">
+  </section>
+  <section>
+    <h2>Why would I bother ?</h2>
+    <ul>
+      <li class="fragment">Server authentication</li>
+      <li class="fragment">Encrypted data</li>
+      <li class="fragment">Data validation</li>
+    </ul>
+  </section>
+  <section>
+     <h2>Generate SSL key</h2>
+     <pre><code>$ openssl genrsa -des3 -out admin-serv.net.key 2048
+
+Generating RSA private key, 2048 bit long modulus
+...........+++
+.....................................................................................+++
+e is 65537 (0x10001)
+Enter pass phrase for admin-serv.net.key:
+Verifying - Enter pass phrase for admin-serv.net.key:</code></pre>
+  </section>
+  <section>
+     <h2>Generate SSL certificate</h2>
+     <pre><code>$ openssl req -new -key admin-serv.net.key -out admin-serv.net.csr
+
+Enter pass phrase for admin-serv.net.key:
+...
+Country Name (2 letter code) [AU]:FR
+State or Province Name (full name) [Some-State]:Paris
+Locality Name (eg, city) []:Paris
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Tellier Benoit
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:btellier.com
+Email Address []:benwa@minet.net
+
+Please enter the following 'extra' attributes</code></pre>
+  </section>
+  <section>
+     <h2>Disable password on the key</h2>
+     <pre><code>$ openssl rsa -in admin-serv.net.key -out admin-serv.net.deprotected.key
+
+Enter pass phrase for admin-serv.net.key:
+writing RSA key</code></pre>
+  </section>
+  <section>
+     <h2>Get a certification</h2>
+     <pre><code>$ cat admin-serv.crt rapidssl.ca.crt > certificate.admin-serv.net.crt</code></pre>
+  </section>
+  <section>
+     <h2>Self signature</h2>
+     <pre><code>$ openssl x509 -req -days 365 -in admin-serv.net.csr -signkey admin-serv.net.key -out admin-serv.net.csr 
+
+Signature ok
+subject=/C=FR/ST=Paris/L=Paris/O=Tellier Benoit/CN=btellier.com/emailAddress=benwa@minet.net
+Getting Private key
+Enter pass phrase for admin-serv.net.key:</code></pre>
+  </section>
+  <section>
+     <h2>Use these certificate with NGinx</h2>
+     <pre><code>$ nano /etc/nginx/sites-enabled/any
+
+server {
+    listen 443;
+    server_name admin-serv.net;
+
+    ssl on;
+    ssl_certificate     /etc/nginx/ssl/certificate.admin-serv.net.crt;
+    ssl_certificate_key /etc/nginx/ssl/admin-serv.net.deprotected.key;
+
+    location / {
+        root    /var/www/;
+        index   index.html;
+    }
+}</code></pre>
   </section>
 </section>
 
